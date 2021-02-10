@@ -1,3 +1,4 @@
+# Input
 batch_file = [
 	'ecl:gry pid:860033327 eyr:2020 hcl:#fffffd',
 	'byr:1937 iyr:2017 cid:147 hgt:183cm',
@@ -14,7 +15,6 @@ batch_file = [
 	'iyr:2011 ecl:brn hgt:59in'
 ]
 
-passport_holder_spaces = [-1]  # list with breaklines to split passports.
 
 # Finds where every break is.
 for idx, line in enumerate(batch_file):
@@ -24,9 +24,10 @@ for idx, line in enumerate(batch_file):
 passport_holder_spaces.append(len(batch_file))
 
 
-def passport(break1, break2, array):
+# Functions
+def passport_detail_string(break1, break2, array):
 	"""
-	Defines each passport input.
+	Defines each passport_detail_string input.
 	:type break1: int
 	:type break2: int
 	:type array: list
@@ -34,7 +35,19 @@ def passport(break1, break2, array):
 	info = ''
 	for rule in range(break1, break2, 1):
 		info += array[rule] + ' '
+	return info
 
 
-for index in range(0, len(passport_holder_spaces)-1, 1):
-	print(passport(passport_holder_spaces[index]+1, passport_holder_spaces[index+1], batch_file))
+
+
+# Finds where every break is.
+passport_places = [-1]
+
+for idx, line in enumerate(batch_file):
+	if line == '':
+		passport_places.append(idx)
+
+passport_places.append(len(batch_file))
+
+for index in range(0, len(passport_places) - 1, 1):
+	print(passport_detail_string(passport_places[index] + 1, passport_places[index + 1], batch_file))
