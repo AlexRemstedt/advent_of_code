@@ -30,3 +30,6 @@ These problems were overcome after some runs of trial and error, by using `if` s
 
 Later when trying to import [file3](/input_files/day_3_input), I had some trouble due to breaklines which took up an 
     extra character. This was fixed by using `splitlines()`.
+
+### Day 4
+[Day 4](day_4.py) requires you to count the amount of sequnces that are valid according to a set of rules.
