@@ -26,6 +26,47 @@ batch_file = [
 ]
 
 
+# === Passport Class ===
+class Passport(object):
+	def __init__(self, birth_year, issue_year, expiration_year, height, hair_color, eye_color, passport_id, country_id):
+		self.birthYear = birth_year
+		self.issueYear = issue_year
+		self.expirationYear = expiration_year
+		self.height = height
+		self.hairColor = hair_color
+		self.eyeColor = eye_color
+		self.passportId = passport_id
+		self.countryId = country_id
+
+	@classmethod
+	def from_string(cls, string):
+		"""
+		Alternative builder
+
+		:param string: passport input in string format
+		:return: returns class for passport
+		"""
+		keys = string.split(' ')
+		for key in keys:
+			if key[:3] == 'byr':
+				byr = key[4:]
+			elif key[:3] == 'iyr':
+				iyr = key[4:]
+			elif key[:3] == 'eyr':
+				eyr = key[4:]
+			elif key[:3] == 'hgt':
+				hgt = key[4:]
+			elif key[:3] == 'hcl':
+				hcl = key[4:]
+			elif key[:3] == 'ecl':
+				ecl = key[4:]
+			elif key[:3] == 'pid':
+				pid = key[4:]
+			elif key[:3] == 'cid':
+				cid = key[4:]
+		return cls(byr, iyr, eyr, hgt, hcl, ecl, pid, cid)
+
+
 # === List fixing functions ===
 def list_fixer(broken_list):
 	"""
