@@ -1,5 +1,3 @@
-import numpy as np
-
 file3 = open('input_files/day_3_input', 'r')
 forest = list(map(str, file3.read().splitlines()))  # map() makes it iterate
 file3.close()
