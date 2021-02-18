@@ -1,29 +1,32 @@
 """
 	Doc Info:
-		Author: Alex Remstedt	(https://github.com/AlexRemstedt)
+		Author: Alex Remstedt (https://github.com/AlexRemstedt)		\n
 		Github repo: (https://github.com/AlexRemstedt/advent_of_code)
-
-	To do:
-		TODO: passport Class
-		TODO: __docs__ for list_fixer()
 """
 
 # === Input ===
-batch_file = [
-	'ecl:gry pid:860033327 eyr:2020 hcl:#fffffd',
-	'byr:1937 iyr:2017 cid:147 hgt:183cm',
-	'',
-	'iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884',
-	'hcl:#cfa07d byr:1929',
-	'',
-	'hcl:#ae17e1 iyr:2013',
-	'eyr:2024',
-	'ecl:brn pid:760753108 byr:1931',
-	'hgt:179cm',
-	'',
-	'hcl:#cfa07d eyr:2025 pid:166559648',
-	'iyr:2011 ecl:brn hgt:59in'
-]
+file4 = open('input_files/day_4_input', 'r')
+batch_file = list(map(str, file4.read().splitlines()))
+file4.close()
+
+# === Variables ===
+valid_passports = 0
+
+# batch_file = [
+# 	'ecl:gry pid:860033327 eyr:2020 hcl:#fffffd',
+# 	'byr:1937 iyr:2017 cid:147 hgt:183cm',
+# 	'',
+# 	'iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884',
+# 	'hcl:#cfa07d byr:1929',
+# 	'',
+# 	'hcl:#ae17e1 iyr:2013',
+# 	'eyr:2024',
+# 	'ecl:brn pid:760753108 byr:1931',
+# 	'hgt:179cm',
+# 	'',
+# 	'hcl:#cfa07d eyr:2025 pid:166559648',
+# 	'iyr:2011 ecl:brn hgt:59in'
+# ]
 
 
 # === Passport Class ===
@@ -40,9 +43,9 @@ class Passport(object):
 
 	def is_valid(self):
 		if self.birthYear and self.issueYear and self.expirationYear and self.height and self.hairColor and self.eyeColor and self.passportId:
-			return False
-		else:
 			return True
+		else:
+			return False
 
 	@classmethod
 	def from_string(cls, string):
@@ -79,7 +82,6 @@ class Passport(object):
 				pid = key[4:]
 			elif key[:3] == 'cid':
 				cid = key[4:]
-		print(byr, iyr, eyr, hgt, hcl, ecl, pid, cid)
 		return cls(byr, iyr, eyr, hgt, hcl, ecl, pid, cid)
 
 
@@ -126,5 +128,8 @@ def break_finder(broken_list):
 passports = {}
 for i in range(len(list_fixer(batch_file))):
 	passports.update({i: Passport.from_string(list_fixer(batch_file)[i])})
-	print(passports[i].is_valid())
+	x = (passports[i].is_valid())
+	if x:
+		valid_passports += 1
 
+print(valid_passports)
