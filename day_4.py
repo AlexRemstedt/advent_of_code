@@ -38,15 +38,30 @@ class Passport(object):
 		self.passportId = passport_id
 		self.countryId = country_id
 
+	def is_valid(self):
+		if self.birthYear and self.issueYear and self.expirationYear and self.height and self.hairColor and self.eyeColor and self.passportId:
+			return False
+		else:
+			return True
+
 	@classmethod
 	def from_string(cls, string):
 		"""
 		Alternative builder
 
 		:param string: passport input in string format
+		:type string: str
 		:return: returns class for passport
 		"""
 		keys = string.split(' ')
+		byr = False
+		iyr = False
+		eyr = False
+		hgt = False
+		hcl = False
+		ecl = False
+		pid = False
+		cid = False
 		for key in keys:
 			if key[:3] == 'byr':
 				byr = key[4:]
@@ -64,13 +79,14 @@ class Passport(object):
 				pid = key[4:]
 			elif key[:3] == 'cid':
 				cid = key[4:]
+		print(byr, iyr, eyr, hgt, hcl, ecl, pid, cid)
 		return cls(byr, iyr, eyr, hgt, hcl, ecl, pid, cid)
 
 
 # === List fixing functions ===
 def list_fixer(broken_list):
 	"""
-
+	list_fixer fixes the broken_list.
 	:param broken_list: a list consisting of string-parts broken up by empty strings.
 	:return: a list with only full strings.
 	"""
@@ -105,4 +121,10 @@ def break_finder(broken_list):
 	broken_lines.sort()  # Sorts the indexes
 	return broken_lines
 
+
+# === Dictionary ===
+passports = {}
+for i in range(len(list_fixer(batch_file))):
+	passports.update({i: Passport.from_string(list_fixer(batch_file)[i])})
+	print(passports[i].is_valid())
 
