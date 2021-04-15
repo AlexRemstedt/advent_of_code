@@ -15,6 +15,9 @@ with open('input_files/day_4_input', 'r') as batch:
 
 # === Passport Class ===
 class Passport(object):
+	eyecolors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
+	haircolors = '# 1 2 3 4 5 6 7 8 9 0 a b c d e f'.split()
+
 	def __init__(self, birth_year, issue_year, expiration_year, height, hair_color, eye_color, passport_id, country_id):
 		self.birthYear = birth_year
 		self.issueYear = issue_year
@@ -26,10 +29,23 @@ class Passport(object):
 		self.countryId = country_id
 
 	def is_valid(self):
-		if self.birthYear and self.issueYear and self.expirationYear and self.height and self.hairColor and self.eyeColor and self.passportId:
-			return True
-		else:
-			return False
+		"""
+		validate passport
+
+		:return:
+		"""
+		if self.passportId and self.height and self.hairColor and self.issueYear and self.eyeColor and self.birthYear \
+			and self.expirationYear:
+			if len(self.hairColor) == 7:
+				ls = [u for u in self.hairColor if u in self.haircolors]
+				if len(ls) == 7:
+					if 1920 <= int(self.birthYear) <= 2002 and 2010 <= int(self.issueYear) <= 2020 <= int(self.expirationYear) <= 2030:
+						if self.eyeColor in self.eyecolors and len(self.passportId) == 9:
+							if type(self.height) == str and self.height[-2:] == 'cm' and 150 <= int(self.height[:-2]) <= 193:
+								return True
+							elif type(self.height) == str and self.height[-2:] == 'in' and 59 <= int(self.height[:-2]) <= 76:
+								return True
+
 
 	@classmethod
 	def from_string(cls, string):
