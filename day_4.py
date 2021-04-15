@@ -124,12 +124,8 @@ def break_finder(broken_list):
 	return broken_lines
 
 
-# === Dictionary ===
-passports = {}
-for i in range(len(list_fixer(batch_file))):
-	passports.update({i: Passport.from_string(list_fixer(batch_file)[i])})
-	x = (passports[i].is_valid())
-	if x:
+for n, i in enumerate(list_fixer(batch_file)):
+	x = Passport.from_string(i)
+	if x.is_valid():
 		valid_passports += 1
-
 print(valid_passports)
