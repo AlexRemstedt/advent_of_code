@@ -1,7 +1,9 @@
+# encoding: utf-8
+# author: Alex Remstedt (https://github.com/AlexRemstedt)
 """
-	Doc Info:
-		Author: Alex Remstedt (https://github.com/AlexRemstedt)		\n
-		Github repo: (https://github.com/AlexRemstedt/advent_of_code)
+passport validator
+
+Github repo: (https://github.com/AlexRemstedt/advent_of_code)
 """
 
 # === Variables ===
@@ -39,11 +41,14 @@ class Passport(object):
 			if len(self.hairColor) == 7:
 				ls = [u for u in self.hairColor if u in self.haircolors]
 				if len(ls) == 7:
-					if 1920 <= int(self.birthYear) <= 2002 and 2010 <= int(self.issueYear) <= 2020 <= int(self.expirationYear) <= 2030:
+					if 1920 <= int(self.birthYear) <= 2002 \
+							and 2010 <= int(self.issueYear) <= 2020 <= int(self.expirationYear) <= 2030:
 						if self.eyeColor in self.eyecolors and len(self.passportId) == 9:
-							if type(self.height) == str and self.height[-2:] == 'cm' and 150 <= int(self.height[:-2]) <= 193:
+							if type(self.height) == str and self.height[-2:] == 'cm' \
+									and 150 <= int(self.height[:-2]) <= 193:
 								return True
-							elif type(self.height) == str and self.height[-2:] == 'in' and 59 <= int(self.height[:-2]) <= 76:
+							elif type(self.height) == str and self.height[-2:] == 'in' \
+									and 59 <= int(self.height[:-2]) <= 76:
 								return True
 
 
