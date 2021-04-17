@@ -31,6 +31,7 @@ class Passport(object):
 		self.countryId = country_id
 
 	def is_valid(self):
+
 		"""
 		validate passport
 
@@ -50,7 +51,6 @@ class Passport(object):
 							elif type(self.height) == str and self.height[-2:] == 'in' \
 									and 59 <= int(self.height[:-2]) <= 76:
 								return True
-
 
 	@classmethod
 	def from_string(cls, string):
@@ -133,4 +133,5 @@ for n, i in enumerate(list_fixer(batch_file)):
 	x = Passport.from_string(i)
 	if x.is_valid():
 		valid_passports += 1
+
 print(valid_passports)
