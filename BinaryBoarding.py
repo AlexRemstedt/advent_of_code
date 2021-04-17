@@ -64,13 +64,16 @@ def seat_id(string):
 
 # input
 def main():
-	x = []
+	x = [0]
 
 	# open file
 	with open('input_files/day_5_input', 'r') as batch:
 		for line in batch:
 			x.append(seat_id(line))
-	print(max(x))
+		pass
+	for n in range(882):
+		if n not in x:
+			print(n)
 
 
 if __name__ == "__main__":
