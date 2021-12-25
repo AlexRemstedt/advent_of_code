@@ -22,6 +22,7 @@ def data_manipulation():
 
     
 
+# make grid_map
 class GridMap:
     """Contain GridMap for lines."""
 
@@ -58,13 +59,6 @@ class GridMap:
             self.grid[x][a[1]] += 1
         return "Line drawn"
 
-
-class Coordinate:
-    """Coordinate object."""
-
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
 
 
 def main():
