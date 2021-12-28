@@ -52,6 +52,15 @@ class Line:
         self.a = tuple(point_1)
         self.b = tuple(point_2)
 
+    def is_vertical(self):
+        """Determine whether line is vertical."""
+        return self.a[0] == self.b[0]
+
+    def is_horizontal(self):
+        """Determine whether line is vertical."""
+        return self.a[1] == self.b[1]
+        
+
 
 def main():
     """Main function."""
