@@ -38,6 +38,13 @@ class Line:
         """Determine whether line is vertical."""
         return self.begin[1] == self.end[1]
 
+    def is_diagonal(self):
+        """Determine whether line is diagonal."""
+        dx = self.begin[0] - self.end[0]
+        dy = self.begin[1] - self.end[1]
+        if dy/dx == 1 or dy/dx == -1:
+            return dy/dx
+        return False
 
 # Make grid_map
 class GridMap:
@@ -62,14 +69,31 @@ class GridMap:
 
     def draw_line(self, line: Line):
         """Draw line."""
-        if line.is_horizontal():  # todo: add way to also iterate backwards
+        if line.is_horizontal(): 
             r = sorted([line.begin[0], line.end[0]])
             for point in range(r[0], r[1] + 1):
                 self.grid[line.begin[1]][point] += 1
-        elif line.is_vertical():  # todo: add way to also iterate backwards
+
+        elif line.is_vertical():  
             r = sorted([line.begin[1], line.end[1]])
             for point in range(r[0], r[1] + 1):
                 self.grid[point][line.begin[0]] += 1
+
+        elif line.is_diagonal() == 1:
+            r = sorted([line.begin[0], line.end[0]])
+            y_offset = line.begin[1] - line.begin[0]
+            for point in range(r[0], r[1] + 1):
+                self.grid[point][point + y_offset] += 1
+
+        elif line.is_diagonal() == -1:
+            r = sorted([line.begin[0], line.end[0]])
+            y_offset = line.begin[1] - line.end[0]
+            x = range(r[0], r[1] + 1)
+            y = reversed(x)
+            y = [val + y_offset for val in y]
+            for i, j in zip(x, y):
+                self.grid[i][j] += 1
+
         else:  # Works
             return "No line drawn"
         
