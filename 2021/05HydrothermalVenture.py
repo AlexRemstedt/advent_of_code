@@ -4,10 +4,10 @@ from typing import List
 import numpy as np
 
 
-def data_manipulation():
+def data_manipulation(path_to_input='./inputs/5_HydrothermalVenture'):
     """Get data from inputfile."""
     # Main script
-    with open('./inputs/5_HydrothermalVenture', 'r') as f:
+    with open(path_to_input, 'r') as f:
         raw = [l for l in f]
     lines = []
     for coord_pair in raw:
@@ -21,7 +21,23 @@ def data_manipulation():
             for m, val in enumerate(coord_pair[n]):
                 coord_pair[n][m] = int(val)
     return lines
+
     
+class Line:
+    """Line object."""
+
+    def __init__(self, point_1: List[float], point_2: List[float]):
+        self.begin = tuple(point_1)
+        self.end = tuple(point_2)
+
+    def is_vertical(self):
+        """Determine whether line is vertical."""
+        return self.begin[0] == self.end[0]
+
+    def is_horizontal(self):
+        """Determine whether line is vertical."""
+        return self.begin[1] == self.end[1]
+
 
 # Make grid_map
 class GridMap:
@@ -41,34 +57,45 @@ class GridMap:
             for coord in line:
                 for value in coord:
                     if value > max_:
-                        max_ = value
+                        max_ = value + 1
         return cls(size=(max_, max_))
 
-
-class Line:
-    """Line object."""
-
-    def __init__(self, point_1: List[float], point_2: List[float]):
-        self.a = tuple(point_1)
-        self.b = tuple(point_2)
-
-    def is_vertical(self):
-        """Determine whether line is vertical."""
-        return self.a[0] == self.b[0]
-
-    def is_horizontal(self):
-        """Determine whether line is vertical."""
-        return self.a[1] == self.b[1]
+    def draw_line(self, line: Line):
+        """Draw line."""
+        if line.is_horizontal():  # todo: add way to also iterate backwards
+            r = sorted([line.begin[0], line.end[0]])
+            for point in range(r[0], r[1] + 1):
+                self.grid[line.begin[1]][point] += 1
+        elif line.is_vertical():  # todo: add way to also iterate backwards
+            r = sorted([line.begin[1], line.end[1]])
+            for point in range(r[0], r[1] + 1):
+                self.grid[point][line.begin[0]] += 1
+        else:  # Works
+            return "No line drawn"
         
+
+def count_lines(grid: GridMap):
+    big_numbers = 0
+    for line in grid.grid:
+        for number in line:
+            big_numbers += int(number >= 2)
+    return big_numbers
 
 
 def main():
     """Main function."""
     basic_lines = data_manipulation()
-    lines = []
-    for line in basic_lines:
-        lines.append(Line(line[0], line[1]))
-    print(lines)
+
+    # Initialize grid
+    grid = GridMap.from_lines(basic_lines)
+
+    # Initialize lines
+    lines = [Line(line[0], line[1]) for line in basic_lines]
+
+    # Draw lines
+    [grid.draw_line(line) for line in lines]
+    print(count_lines(grid))
+
 
 if __name__ == "__main__":
     main()
