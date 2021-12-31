@@ -109,7 +109,7 @@ def count_lines(grid: GridMap):
 
 def main():
     """Main function."""
-    basic_lines = data_manipulation('./inputs/5test')
+    basic_lines = data_manipulation()
 
     # Initialize grid
     grid = GridMap.from_lines(basic_lines)
@@ -118,10 +118,7 @@ def main():
     lines = [Line(line[0], line[1]) for line in basic_lines]
 
     # Draw lines
-    for line in lines:
-        print(line.begin, line.end)
-        print(grid.draw_line(line))
-        input()
+    [grid.draw_line(line) for line in lines]
     print(count_lines(grid))
 
 
