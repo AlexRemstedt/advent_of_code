@@ -83,19 +83,20 @@ class GridMap:
             r = sorted([line.begin[0], line.end[0]])
             y_offset = line.begin[1] - line.begin[0]
             for point in range(r[0], r[1] + 1):
-                self.grid[point][point + y_offset] += 1
+                self.grid[point + y_offset][point] += 1
 
         elif line.is_diagonal() == -1:
             r = sorted([line.begin[0], line.end[0]])
             y_offset = line.begin[1] - line.end[0]
-            x = range(r[0], r[1] + 1)
-            y = reversed(x)
+            x = [*range(r[0], r[1] + 1)]
+            y = x[::-1]
             y = [val + y_offset for val in y]
             for i, j in zip(x, y):
-                self.grid[i][j] += 1
+                self.grid[j][i] += 1
 
         else:  # Works
             return "No line drawn"
+        return self.grid
         
 
 def count_lines(grid: GridMap):
@@ -108,7 +109,7 @@ def count_lines(grid: GridMap):
 
 def main():
     """Main function."""
-    basic_lines = data_manipulation()
+    basic_lines = data_manipulation('./inputs/5test')
 
     # Initialize grid
     grid = GridMap.from_lines(basic_lines)
@@ -117,7 +118,10 @@ def main():
     lines = [Line(line[0], line[1]) for line in basic_lines]
 
     # Draw lines
-    [grid.draw_line(line) for line in lines]
+    for line in lines:
+        print(line.begin, line.end)
+        print(grid.draw_line(line))
+        input()
     print(count_lines(grid))
 
 
