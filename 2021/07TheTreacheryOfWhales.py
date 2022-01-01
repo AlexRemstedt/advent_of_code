@@ -11,7 +11,7 @@ def part1():
     max_pos = max(positions)
     min_pos = min(positions)
 
-    old_fuel= 0
+    old_fuel = max_pos * len(positions)
     for average_position in range(min_pos, max_pos):
         fuel = 0
         for position in positions:
@@ -21,7 +21,23 @@ def part1():
     return old_fuel
 
 
+def part2():
+    positions = get_input()
+    max_pos = max(positions)
+    min_pos = min(positions)
+
+    old_fuel = 1000000000000000
+    for average_position in range(min_pos, max_pos):
+        fuel = 0
+        for position in positions:
+            x = abs(average_position - position)
+            fuel += x * (x + 1) / 2
+        if old_fuel > fuel:
+            old_fuel = fuel
+    return old_fuel
+
 if __name__ == "__main__":
     print(part1())
+    print(part2())
 
 
