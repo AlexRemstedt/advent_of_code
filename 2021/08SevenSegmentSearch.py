@@ -1,3 +1,4 @@
+#./venv/bin/python
 """Day 8: Seven Segment Search.
 
  a
@@ -28,7 +29,38 @@ def part1():
     return count
 
 
+def part2():
+    #  d
+    # e a
+    #  f
+    # g b
+    #  c
+    names = ['abcdeg', 'ab', 'acdfg', 'abcdf', 'abef', 'bcdef', 'bcdefg', 'abd',
+            'abcdefg', 'abcdef']
+    lines = get_input()
+    count = 0
+    for digits in lines: 
+        print(digits)
+        num = ''
+        for digit in digits:
+            sorted_dig = ''.join(sorted(digit))
+            if len(sorted_dig) == 4:
+                num += '4'
+            elif len(sorted_dig) == 3:
+                num += '7'
+            elif len(sorted_dig) == 2:
+                num += '1'
+            elif len(sorted_dig) == 7:
+                num += '8'
+            elif sorted_dig in names:
+                num += str(names.index(sorted_dig))
+        print(num)
+        count += int(num)
+    return count
+
+
 if __name__ == "__main__":
     print(part1()) 
+    print(part2())
 
 
