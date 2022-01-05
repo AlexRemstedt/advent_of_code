@@ -7,6 +7,7 @@ verbeterd met https://mathspp.com/blog/advent-of-code-sonar-sweep-analysis
 """
 
 
+import sys
 from itertools import tee
 
 
@@ -16,20 +17,21 @@ def pairwise(it):
     next(next_)
     yield from zip(prev_, next_)
 
-
+input_ = sys.argv[1] if len(sys.argv) > 1 else '1.in'
 # Task 1
-with open("data/1_SonarSweep", 'r') as raw_inputs:
+with open(input_, 'r') as raw_inputs:
     # integer-ify 
     # use brackets for generator-expression
     depths = (int(line) for line in raw_inputs)
 
     # voor zip() neemt hij altijd de grootte van de kleinste
     count1 = sum(prev_ < next_ for prev_, next_ in pairwise(depths))
+print(count1)
 
 
 # Task 2 (Also generalised.)
 window_size = 3
-with open("data/1_SonarSweep", 'r') as raw_inputs:
+with open(input_, 'r') as raw_inputs:
     depths = (int(line) for line in raw_inputs)
     window = [next(depths) for _ in range(window_size)]
     count = 0
