@@ -4,7 +4,7 @@
 
 ## Day 8
 
-I used code from [https://youtu.be/DhQPrF-LBoE](this video).
+I used code from [this video](https://youtu.be/DhQPrF-LBoE).
 
 ```py
 def part1(path_to_file='./inputs/8_SevenSegmentSearch'):
