@@ -32,3 +32,13 @@ finally [looked up](https://docs.python.org/3.8/libray/functions.html#map) what
 Needed a bit of help used code from [this
 guy](https://zonito.medium.com/smoke-basin-day-9-advent-of-code-2021-python-solution-54c8d3da58a7).
 
+## Day 10
+
+some are incomplete
+others are corrupt.
+corrupt: closes with the wrong character
+
+Problem: now only looks @ first beginning
+Have to find a way to look between linked chars.
+Idea: find()
+
