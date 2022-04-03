@@ -2,36 +2,85 @@
 
 import sys
 import numpy as np
+from listing import Tuple
+
+class Octopus:
+    """Octopus object."""
+
+    def __init__(self, energy_level: int, coordinates: Tuple[int]):
+        self.energy_level = energy_level
+        self.coordinates = coordinates
+
+    def increase_value(self):
+        """Increase energy level by one."""
+        self.energy_level += 1
+
+    def get_surrounding(self, grid):
+        """Get all the surrounding octopi positions."""
+        coords = []
+        boundaries = (0, 9)
+        rows = list(range(j - 1, j + 2))
+        cols = list(range(i - 1, i + 2))
+        for y in rows:
+            if y in list(range(boundaries)):
+                for x in cols:
+                    if x in list(range(boundaries)):
+                        coords.append((x, y))
+        coords.remove((i, j))
+        return coords
+
 
 class EnergyGrid:
 
-    def __init__(self, input_file):
-        self.input_file = input_file
-        self.grid = self.make_grid()
-    
-    def make_grid(self):
-        """Make a grid of octopi-energy-levels."""
-        octopi = []
-        for line in open(self.input_file):
-            energy_levels = [int(octopus) for octopus in line.strip()]
-            octopi.append(energy_levels)
-        return octopi
+    def __init__(self, grid):
+        self.grid = grid
+
+    @classmethod
+    def from_input(cls, input_file):
+        """Create grid from input."""
+        grid = []
+        for j, line in enumerate(open(input_file)):
+            n_line = []
+            for i, value in enumerate(line.strip()):
+                octo = Octopus(int(value), (i, j))
+                n_line.append(octo)
+            grid.append(n_line)
+        return cls(grid)
 
     def increase_energy(self):
-        """Increase the energylevels by 1."""
-        self.grid = np.array(self.grid) + 1
-        self.check_flash()
+        """Increase all energylevels by 1."""
+        for line in self.grid:
+            for point in line:
+                point.increase_value()
+
+    def flash(i, j):
+        """Add one energy-level to surrounding values."""
+        # center numbers
+        # edge numbers
 
     def check_flash(self):
-        if 9 in self.grid:
-            get_index()
-        for line in self.grid:
-            print(number)
+        """Check for flashes."""
+        joint 
+        for j, line in enumerate(self.grid):
+            for i, value in enumerate(line):
+                if value.flashes():
+                    surrounding = value.get_surrounding()
+                    for coord in surrounding:
+                        coord.increase_value()
+
+
+def protocol(grid):
+    """Cycle through protocols."""
+    # step 1: Energy level of each octopus increase by 1.
+    grid.increase_energy()
+    # step 2: If energylevel > 9: Flash
+    grid.check_flash()
+    return None
 
 
 def part1(input_file):
-    octopussy = EnergyGrid(input_file)
-    octopussy.increase_energy() 
+    full_grid = EnergyGrid.from_input(input_file)
+    protocol(full_grid)
 
 
 def main():
