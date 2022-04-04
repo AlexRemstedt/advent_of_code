@@ -75,9 +75,13 @@ class OctopusGrid:
                 octo.get_boost()
                 if octo.flash():
                     self.flashes += 1
+        return "Grid boosted"
+
+    def scan_grid(self):
+        for y, octo_row in enumerate(self.matrix):
+            for x, octo in enumerate(octo_row):
                     neighbours = octo.get_neighbours((x, y), self.range_)
                     self.boost_surrounding(neighbours)
-        return "Grid boosted"
 
     def boost_surrounding(self, neighbours):
         """Boost neighbours."""
@@ -92,19 +96,28 @@ class OctopusGrid:
     
     def show(self):
         """Show the grid in the same way it is on AoC."""
+        octo_grid = []
+        for octo_line in self.matrix:
+            octo_print = []
+            for octopus in octo_line:
+                octo_print.append(octopus.energy_level)
+            print(octo_print)
 
 
 def stepper(grid):
     """Go through steps."""
     # TODO: Loop throug grid and
     steps = 10
-    for step in range(steps):
-        print(f"Upcoming {step=}")
+    for step in range(1, steps):
+        print(f"After {step=}")
 
         # Boost full grid -> This also handles neighbours who flash.
         grid.boost_all()
+
+        # TODO: fix proper order of actions.
         grid.show()
         print(f"{grid.flashes=}")
+        grid.scan_grid()
 
     return "Fully stepped"
 
