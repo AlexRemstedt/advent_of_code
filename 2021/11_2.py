@@ -22,14 +22,17 @@ class Octopus:
 
     def __init__(self, initial_energy_level):
         self.energy_level = initial_energy_level
+        self.flashed = False
 
     def get_boost(self):
+        "Give boost to Octopus."""
         self.energy_level += 1
+        return "BOOOST"
 
     def flash(self):
         """Octopus is flash."""
-        if self.energy_level > 9:
-            self.energy_level = 0
+        if self.energy_level > 9 and not self.flashed:
+            self.flashed = True
             return True
 
     @staticmethod
@@ -73,15 +76,9 @@ class OctopusGrid:
         for y, octo_row in enumerate(self.matrix):
             for x, octo in enumerate(octo_row):
                 octo.get_boost()
-                if octo.flash():
+                if octo.flash:
                     self.flashes += 1
         return "Grid boosted"
-
-    def scan_grid(self):
-        for y, octo_row in enumerate(self.matrix):
-            for x, octo in enumerate(octo_row):
-                    neighbours = octo.get_neighbours((x, y), self.range_)
-                    self.boost_surrounding(neighbours)
 
     def boost_surrounding(self, neighbours):
         """Boost neighbours."""
@@ -93,6 +90,12 @@ class OctopusGrid:
                 new_neighbours = self.matrix[y][x].get_neighbours((x, y), self.range_)
                 self.boost_surrounding(new_neighbours)
         return "Grid boosted"
+
+    def reset_flash(self):
+        for y, octo_row in enumerate(self.matrix):
+            for x, octo in enumerate(octo_row):
+                if octo.energy_level > 9:
+                    octo.energy_level = 0 
     
     def show(self):
         """Show the grid in the same way it is on AoC."""
@@ -111,13 +114,18 @@ def stepper(grid):
     for step in range(1, steps):
         print(f"After {step=}")
 
-        # Boost full grid -> This also handles neighbours who flash.
+        # Correct order:
+        # 1. Energy level of each Octo increase
+        # 2. Any octo with energy_level > 9 flash
+        # 3. Increase level surrounding flash
+        # 4. Repeat step 2-3 until all flashes have been flashed.
         grid.boost_all()
+        # 5. Set flashed to 0
+        grid.reset_flash()
 
-        # TODO: fix proper order of actions.
+        # Boost full grid -> This also handles neighbours who flash.
+
         grid.show()
-        print(f"{grid.flashes=}")
-        grid.scan_grid()
 
     return "Fully stepped"
 
