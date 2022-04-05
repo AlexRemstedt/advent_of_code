@@ -1,91 +1,150 @@
 """Day 11: Dumbo Octopus."""
 
+"""
+    5483143223
+    2745854711
+    5264556173
+    6141336146
+    6357385478
+    4167524645
+    2176841721
+    6882881134
+    4846848554
+    5283751526
+"""
+
 import sys
 import numpy as np
-from listing import Tuple
+from typing import Tuple
 
 class Octopus:
-    """Octopus object."""
+    """Hold energylevels."""
 
-    def __init__(self, energy_level: int, coordinates: Tuple[int]):
-        self.energy_level = energy_level
-        self.coordinates = coordinates
+    def __init__(self, initial_energy_level):
+        self.energy_level = initial_energy_level
+        self.flashed = False
 
-    def increase_value(self):
-        """Increase energy level by one."""
+    def get_boost(self):
+        "Give boost to Octopus."""
         self.energy_level += 1
+        return "BOOOST"
 
-    def get_surrounding(self, grid):
-        """Get all the surrounding octopi positions."""
-        coords = []
-        boundaries = (0, 9)
-        rows = list(range(j - 1, j + 2))
-        cols = list(range(i - 1, i + 2))
-        for y in rows:
-            if y in list(range(boundaries)):
-                for x in cols:
-                    if x in list(range(boundaries)):
-                        coords.append((x, y))
-        coords.remove((i, j))
-        return coords
+    def flash(self):
+        """Octopus is flash."""
+        if self.energy_level > 9 and not self.flashed:
+            self.flashed = True
+            return True
+
+    @staticmethod
+    def get_neighbours(center: Tuple, range_):
+        """Get neighbours of octopus.
+
+        [-1, -1] [0, -1] [1, -1]
+        [-1, 0]  [x, y]  [1, 0]
+        [-1, 1]  [0, 1]  [1, 1]
+        """
+        # find surrounding
+        surrounders = [(-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1),
+                       (0, 1), (1, 1)]
+        neighbours = []
+        for (x, y) in surrounders:
+            new_x = center[0] + x
+            new_y = center[1] + y
+            # TODO: Check range here?
+            if new_x in range_[0] and new_y in range_[1]:
+                neighbours.append((new_x, new_y))
+        return neighbours
 
 
-class EnergyGrid:
+class OctopusGrid:
+    """Hold octopus positions."""
 
-    def __init__(self, grid):
-        self.grid = grid
+    def __init__(self, octo_matrix):
+        """Initialise grid."""
+        self.matrix = octo_matrix
+        self.range_ = (range(len(octo_matrix[0])), range(len(octo_matrix)))
+        self.flashes: int = 0
 
     @classmethod
-    def from_input(cls, input_file):
+    def from_input(cls, path: str):
         """Create grid from input."""
-        grid = []
-        for j, line in enumerate(open(input_file)):
-            n_line = []
-            for i, value in enumerate(line.strip()):
-                octo = Octopus(int(value), (i, j))
-                n_line.append(octo)
-            grid.append(n_line)
+        grid = [[Octopus(int(n)) for n in line.strip()] for line in open(path, 'r')]
         return cls(grid)
 
-    def increase_energy(self):
-        """Increase all energylevels by 1."""
-        for line in self.grid:
-            for point in line:
-                point.increase_value()
+    def boost_all(self):
+        """Boost all octo's in grid."""
+        for y, octo_row in enumerate(self.matrix):
+            for x, octo in enumerate(octo_row):
+                octo.get_boost()
+        return "Grid boosted"
 
-    def flash(i, j):
-        """Add one energy-level to surrounding values."""
-        # center numbers
-        # edge numbers
+    def flasher_check(self):
+        """Check grid for flashers."""
+        for y, octo_row in enumerate(self.matrix):
+            for x, octo in enumerate(octo_row):
+                # check if octo.energy_level > 9 and not yet flashed
+                if self.matrix[y][x].flash():
+                    # Boost all surrounding
+                    neighbours = octo.get_neighbours((x, y), self.range_)
+                    self.boost_surrounding(neighbours)
+        return "checked grid"
 
-    def check_flash(self):
-        """Check for flashes."""
-        joint 
-        for j, line in enumerate(self.grid):
-            for i, value in enumerate(line):
-                if value.flashes():
-                    surrounding = value.get_surrounding()
-                    for coord in surrounding:
-                        coord.increase_value()
+    def boost_surrounding(self, neighbours):
+        """Boost neighbours."""
+        for (x, y) in neighbours:
+            neighbour = self.matrix[y][x]
+            neighbour.get_boost()
+            if neighbour.flash():
+                new_neighbours = neighbour.get_neighbours((x, y), self.range_)
+                self.boost_surrounding(new_neighbours)
+        return "Neighbours boosted"
+
+    def reset_flash(self):
+        """Reset all flashed octi to 0."""
+        for y, octo_row in enumerate(self.matrix):
+            for x, octo in enumerate(octo_row):
+                if octo.flashed:
+                    self.flashes += 1
+                    self.matrix[y][x].energy_level = 0 
+                    self.matrix[y][x].flashed = False 
+        return "Rest finally"
+    
+    def show(self):
+        """Show the grid in the same way it is on AoC."""
+        octo_grid = []
+        for octo_line in self.matrix:
+            octo_print = []
+            for octopus in octo_line:
+                octo_print.append(octopus.energy_level)
+            print(octo_print)
+        return "Showing grid"
 
 
-def protocol(grid):
-    """Cycle through protocols."""
-    # step 1: Energy level of each octopus increase by 1.
-    grid.increase_energy()
-    # step 2: If energylevel > 9: Flash
-    grid.check_flash()
-    return None
+def stepper(grid):
+    """Go through steps."""
+    # TODO: Loop throug grid and
+    steps = 100
+    for step in range(0, steps):
+        # Correct order:
+        # 1. Energy level of each Octo increase
+        grid.boost_all()
 
+        # 2. Any octo with energy_level > 9 flash
+        # 3. Increase level surrounding flash
+        grid.flasher_check()
 
-def part1(input_file):
-    full_grid = EnergyGrid.from_input(input_file)
-    protocol(full_grid)
+        # 5. Set flashed to 0
+        grid.reset_flash()
+    print(grid.flashes)
+    return "Fully stepped"
 
 
 def main():
-    input_file = sys.argv[1] if len(sys.argv) > 1 else '10.in'
-    part1(input_file)
+    input_file = sys.argv[1] if len(sys.argv) > 1 else '11.in'
+    grid = OctopusGrid.from_input(input_file)
+    stepper(grid)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
+
