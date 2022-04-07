@@ -1,18 +1,5 @@
 """Day 11: Dumbo Octopus."""
 
-"""
-    5483143223
-    2745854711
-    5264556173
-    6141336146
-    6357385478
-    4167524645
-    2176841721
-    6882881134
-    4846848554
-    5283751526
-"""
-
 import sys
 import numpy as np
 from typing import Tuple
@@ -119,30 +106,42 @@ class OctopusGrid:
             print(octo_print)
         return "Showing grid"
 
+    def sim_flash(self):
+        """Check for simultaneous flash."""
+        sum_ = 0
+        for y in self.matrix:
+            for x in y:
+                sum_ += x.energy_level
+        return not bool(sum_)
+
 
 def stepper(grid):
     """Go through steps."""
     # TODO: Loop throug grid and
-    steps = 100
+    steps = 1000
     for step in range(0, steps):
-        # Correct order:
         # 1. Energy level of each Octo increase
         grid.boost_all()
-
         # 2. Any octo with energy_level > 9 flash
         # 3. Increase level surrounding flash
         grid.flasher_check()
-
         # 5. Set flashed to 0
         grid.reset_flash()
+        if grid.sim_flash():
+            print(f"{1+step=}")
+    grid.show()
     print(grid.flashes)
     return "Fully stepped"
 
 
 def main():
+    # Part 1
     input_file = sys.argv[1] if len(sys.argv) > 1 else '11.in'
     grid = OctopusGrid.from_input(input_file)
     stepper(grid)
+
+    # Part 2
+    
 
 
 if __name__ == "__main__":
